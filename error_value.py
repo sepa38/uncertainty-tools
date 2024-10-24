@@ -15,6 +15,10 @@ class ErrorValue:
         rounded_error = round(significant_digit*pow(10, exponent), -exponent)
         rounded_value = round(value, -exponent)
 
+        if rounded_error >= 1:
+            rounded_value = int(rounded_value)
+            rounded_error = int(rounded_error)
+
         return rounded_value, rounded_error
 
     def __add__(self, other):
