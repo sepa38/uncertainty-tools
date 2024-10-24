@@ -13,7 +13,8 @@ class ErrorValue:
         exponent = int(error_parts[1])
 
         rounded_error = round(significant_digit*pow(10, exponent), -exponent)
-        rounded_value = round(value, -exponent)
+        rounding_digit = int(f"{rounded_error:.1e}".split('e')[1])
+        rounded_value = round(value, -rounding_digit)
 
         if rounded_error >= 1:
             rounded_value = int(rounded_value)
