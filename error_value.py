@@ -50,6 +50,9 @@ class ErrorValue:
 
     def __truediv__(self, other):
         if isinstance(other, ErrorValue):
+            if other.value == 0:
+                raise ZeroDivisionError("Cannot divide by zero.")
+
             new_value = self.value / other.value
             partial_x1 = 1 / other.value
             partial_x2 = -self.value / (other.value**2)
