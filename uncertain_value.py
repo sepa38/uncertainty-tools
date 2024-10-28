@@ -34,12 +34,15 @@ class UncertainValue:
         rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
         return UncertainValue(rounded_value, rounded_error)
 
-    def log(self):
+    def log(self, base=math.e):
         if self.value <= 0:
             raise ValueError("Cannot take the logarithm of a non-positive value.")
 
-        new_value = math.log(self.value)
-        new_error = self.error / self.value
+        if base <= 0 or base == 1:
+            raise ValueError("Logarithm base must be positive and not equal to 1.")
+
+        new_value = math.log(self.value) / math.log(base)
+        new_error = self.error / (self.value * math.log(base))
         rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
         return UncertainValue(rounded_value, rounded_error)
 
