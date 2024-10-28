@@ -46,6 +46,15 @@ class UncertainValue:
         rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
         return UncertainValue(rounded_value, rounded_error)
 
+    def pow(self, exponent):
+        if self.value < 0 and exponent % 1 != 0:
+            raise ValueError("Cannot raise a negative base to a non-integer exponent.")
+
+        new_value = pow(self.value, exponent)
+        new_error = abs(exponent * new_value / self.value * self.error)
+        rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
+        return UncertainValue(rounded_value, rounded_error)
+
     def __add__(self, other):
         if isinstance(other, (int, float)):
             other = UncertainValue(other, 0)
