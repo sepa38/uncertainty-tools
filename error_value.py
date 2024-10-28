@@ -22,6 +22,15 @@ class UncertainValue:
 
         return rounded_value, rounded_error
 
+    def sqrt(self):
+        if self.value < 0:
+            raise ValueError("Cannot take the square root of a negative value.")
+
+        new_value = self.value ** 0.5
+        new_error = (self.error / (2 * new_value))
+        rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
+        return UncertainValue(rounded_value, rounded_error)
+
     def __add__(self, other):
         if isinstance(other, UncertainValue):
             new_value = self.value + other.value
