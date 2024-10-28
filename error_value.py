@@ -1,3 +1,6 @@
+import math
+
+
 class UncertainValue:
     def __init__(self, value, error=0):
         self.value = value
@@ -28,6 +31,15 @@ class UncertainValue:
 
         new_value = self.value ** 0.5
         new_error = (self.error / (2 * new_value))
+        rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
+        return UncertainValue(rounded_value, rounded_error)
+
+    def log(self):
+        if self.value <= 0:
+            raise ValueError("Cannot take the logarithm of a non-positive value.")
+
+        new_value = math.log(self.value)
+        new_error = self.error / self.value
         rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
         return UncertainValue(rounded_value, rounded_error)
 
