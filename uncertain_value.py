@@ -118,5 +118,8 @@ class UncertainValue:
         rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
         return UncertainValue(rounded_value, rounded_error)
 
+    def __abs__(self):
+        return UncertainValue(abs(self.value), self.error)
+
     def __repr__(self):
         return f"{self.value} ± {self.error}"
