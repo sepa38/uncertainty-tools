@@ -47,6 +47,8 @@ class UncertainValue:
         return UncertainValue(rounded_value, rounded_error)
 
     def __add__(self, other):
+        if isinstance(other, (int, float)):
+            other = UncertainValue(other, 0)
         if isinstance(other, UncertainValue):
             new_value = self.value + other.value
             new_error = (self.error**2 + other.error**2) ** 0.5
@@ -54,7 +56,12 @@ class UncertainValue:
             return UncertainValue(rounded_value, rounded_error)
         return NotImplemented
 
+    def __radd__(self, other):
+        return self.__add__(other)
+
     def __sub__(self, other):
+        if isinstance(other, (int, float)):
+            other = UncertainValue(other, 0)
         if isinstance(other, UncertainValue):
             new_value = self.value - other.value
             new_error = (self.error**2 + other.error**2) ** 0.5
@@ -62,7 +69,14 @@ class UncertainValue:
             return UncertainValue(rounded_value, rounded_error)
         return NotImplemented
 
+    def __rsub__(self, other):
+        if isinstance(other, (int, float)):
+            other = UncertainValue(other, 0)
+        return other.__sub__(self)
+
     def __mul__(self, other):
+        if isinstance(other, (int, float)):
+            other = UncertainValue(other, 0)
         if isinstance(other, UncertainValue):
             new_value = self.value * other.value
             partial_x1 = other.value
@@ -72,7 +86,12 @@ class UncertainValue:
             return UncertainValue(rounded_value, rounded_error)
         return NotImplemented
 
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
     def __truediv__(self, other):
+        if isinstance(other, (int, float)):
+            other = UncertainValue(other, 0)
         if isinstance(other, UncertainValue):
             if other.value == 0:
                 raise ZeroDivisionError("Cannot divide by zero.")
@@ -84,6 +103,11 @@ class UncertainValue:
             rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
             return UncertainValue(rounded_value, rounded_error)
         return NotImplemented
+
+    def __rtruediv__(self, other):
+        if isinstance(other, (int, float)):
+            other = UncertainValue(other, 0)
+        return other.__truediv__(self)
 
     def __repr__(self):
         return f"{self.value} ± {self.error}"
