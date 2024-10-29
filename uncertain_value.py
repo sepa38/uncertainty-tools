@@ -122,4 +122,12 @@ class UncertainValue:
         return UncertainValue(abs(self.value), self.error)
 
     def __repr__(self):
-        return f"{self.value} ± {self.error}"
+        value_str = f"{self.value}"
+        error_str = f"{self.error}"
+
+        error_decimal_places = -int(f"{self.error:.1e}".split('e')[1])
+        if error_decimal_places > 0:
+            value_str = f"{self.value:.{error_decimal_places}f}"
+            error_str = f"{self.error:.{error_decimal_places}f}"
+
+        return f"{value_str} ± {error_str}"
