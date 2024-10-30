@@ -3,7 +3,7 @@ import math
 
 class UncertainValue:
     def __init__(self, value, error=0):
-        self.value, self.error = self.round_to_significant(value, error)
+        self.value, self.error = self.round_to_significant(value, abs(error))
 
     def round_to_significant(self, value, error):
         if error == 0:
