@@ -8,6 +8,34 @@ class UncertainValue:
         self.round_to_significant()
 
     def round_to_significant(self):
+        def exact_round(value, digit):
+            if digit < 0:
+                value = int(value)
+                value_str = str(value)
+
+                if -digit > len(value_str):
+                    return 0
+
+                rounded_value = int(value_str[:digit] + "0"*(-digit))
+                round_up = 1 if int(value_str[digit]) >= 5 else 0
+                rounded_value += round_up * pow(10, -digit)
+                return rounded_value
+            else:
+                value = float(value)
+                value_str = str(value)
+                integer_part, decimal_part = value_str.split(".")
+
+                if digit >= len(decimal_part):
+                    return value
+
+                rounded_value = float(f"{integer_part}.{decimal_part[:digit]}")
+                round_up = 1 if int(decimal_part[digit]) >= 5 else 0
+                rounded_value += round_up * pow(10, -digit)
+
+                if digit == 0:
+                    rounded_value = int(rounded_value)
+                return rounded_value
+
         if self.error == 0:
             return
 
@@ -16,9 +44,9 @@ class UncertainValue:
         significant_digit = float(error_parts[0])
         exponent = int(error_parts[1])
 
-        rounded_error = round(significant_digit * 10**exponent, -exponent)
+        rounded_error = exact_round(significant_digit * 10**exponent, -exponent)
         rounding_digit = -int(f"{rounded_error:.1e}".split('e')[1])
-        rounded_value = round(self.value, rounding_digit)
+        rounded_value = exact_round(self.value, rounding_digit)
 
         if rounded_error >= 1:
             rounded_value = int(rounded_value)
