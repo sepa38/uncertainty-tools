@@ -24,6 +24,16 @@ class UncertainValue:
 
         return rounded_value, rounded_error
 
+    def format_value_and_error(self):
+        error_decimal_places = -int(f"{self.error:.1e}".split('e')[1])
+        if error_decimal_places > 0:
+            value_str = f"{self.value:.{error_decimal_places}f}"
+            error_str = f"{self.error:.{error_decimal_places}f}"
+        else:
+            value_str = str(self.value)
+            error_str = str(self.error)
+        return value_str, error_str
+
     def sqrt(self):
         if self.value < 0:
             raise ValueError("Cannot take the square root of a negative value.")
@@ -124,12 +134,5 @@ class UncertainValue:
         return UncertainValue(abs(self.value), self.error)
 
     def __repr__(self):
-        value_str = f"{self.value}"
-        error_str = f"{self.error}"
-
-        error_decimal_places = -int(f"{self.error:.1e}".split('e')[1])
-        if error_decimal_places > 0:
-            value_str = f"{self.value:.{error_decimal_places}f}"
-            error_str = f"{self.error:.{error_decimal_places}f}"
-
+        value_str, error_str = self.format_value_and_error()
         return f"{value_str} ± {error_str}"
