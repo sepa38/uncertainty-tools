@@ -136,3 +136,7 @@ class UncertainValue:
     def __repr__(self):
         value_str, error_str = self.format_value_and_error()
         return f"{value_str} ± {error_str}"
+
+    def to_latex(self):
+        value_str, error_str = self.format_value_and_error()
+        return f"${value_str} \pm {error_str}$"
