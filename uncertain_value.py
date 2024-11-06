@@ -3,26 +3,29 @@ import math
 
 class UncertainValue:
     def __init__(self, value, error=0):
-        self.value, self.error = self.round_to_significant(value, abs(error))
+        self.value = value
+        self.error = error
+        self.round_to_significant()
 
-    def round_to_significant(self, value, error):
-        if error == 0:
-            return value, error
+    def round_to_significant(self):
+        if self.error == 0:
+            return
 
-        error_str = f"{error:.1e}"
+        error_str = f"{self.error:.1e}"
         error_parts = error_str.split('e')
         significant_digit = float(error_parts[0])
         exponent = int(error_parts[1])
 
-        rounded_error = round(significant_digit*pow(10, exponent), -exponent)
-        rounding_digit = int(f"{rounded_error:.1e}".split('e')[1])
-        rounded_value = round(value, -rounding_digit)
+        rounded_error = round(significant_digit * 10**exponent, -exponent)
+        rounding_digit = -int(f"{rounded_error:.1e}".split('e')[1])
+        rounded_value = round(self.value, rounding_digit)
 
         if rounded_error >= 1:
             rounded_value = int(rounded_value)
             rounded_error = int(rounded_error)
 
-        return rounded_value, rounded_error
+        self.value = rounded_value
+        self.error = rounded_error
 
     def format_value_and_error(self):
         error_decimal_places = -int(f"{self.error:.1e}".split('e')[1])
@@ -40,8 +43,7 @@ class UncertainValue:
 
         new_value = self.value ** 0.5
         new_error = (self.error / (2 * new_value))
-        rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
-        return UncertainValue(rounded_value, rounded_error)
+        return UncertainValue(new_value, new_error)
 
     def log(self, base=math.e):
         if self.value <= 0:
@@ -52,8 +54,7 @@ class UncertainValue:
 
         new_value = math.log(self.value) / math.log(base)
         new_error = self.error / (self.value * math.log(base))
-        rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
-        return UncertainValue(rounded_value, rounded_error)
+        return UncertainValue(new_value, new_error)
 
     def __add__(self, other):
         if isinstance(other, (int, float)):
@@ -61,8 +62,7 @@ class UncertainValue:
         if isinstance(other, UncertainValue):
             new_value = self.value + other.value
             new_error = (self.error**2 + other.error**2) ** 0.5
-            rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
-            return UncertainValue(rounded_value, rounded_error)
+            return UncertainValue(new_value, new_error)
         return NotImplemented
 
     def __radd__(self, other):
@@ -74,8 +74,7 @@ class UncertainValue:
         if isinstance(other, UncertainValue):
             new_value = self.value - other.value
             new_error = (self.error**2 + other.error**2) ** 0.5
-            rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
-            return UncertainValue(rounded_value, rounded_error)
+            return UncertainValue(new_value, new_error)
         return NotImplemented
 
     def __rsub__(self, other):
@@ -91,8 +90,7 @@ class UncertainValue:
             partial_x1 = other.value
             partial_x2 = self.value
             new_error = ((partial_x1 * self.error)**2 + (partial_x2 * other.error)**2) ** 0.5
-            rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
-            return UncertainValue(rounded_value, rounded_error)
+            return UncertainValue(new_value, new_error)
         return NotImplemented
 
     def __rmul__(self, other):
@@ -109,8 +107,7 @@ class UncertainValue:
             partial_x1 = 1 / other.value
             partial_x2 = -self.value / (other.value**2)
             new_error = ((partial_x1 * self.error)**2 + (partial_x2 * other.error)**2) ** 0.5
-            rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
-            return UncertainValue(rounded_value, rounded_error)
+            return UncertainValue(new_value, new_error)
         return NotImplemented
 
     def __rtruediv__(self, other):
@@ -124,8 +121,7 @@ class UncertainValue:
 
         new_value = pow(self.value, exponent)
         new_error = abs(exponent * new_value / self.value * self.error)
-        rounded_value, rounded_error = self.round_to_significant(new_value, new_error)
-        return UncertainValue(rounded_value, rounded_error)
+        return UncertainValue(new_value, new_error)
 
     def __neg__(self):
         return UncertainValue(-self.value, self.error)
