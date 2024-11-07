@@ -22,7 +22,7 @@ class UncertainValue:
                 return rounded_value
             else:
                 value = float(value)
-                value_str = str(value)
+                value_str = f"{value:.{digit+1}f}"
                 integer_part, decimal_part = value_str.split(".")
 
                 if digit >= len(decimal_part):
