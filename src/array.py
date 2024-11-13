@@ -63,3 +63,6 @@ class Array:
             self.values.append(value)
         else:
             raise ValueError("Appended value must be an instance of UncertainValue, int or float.")
+
+    def map(self, func):
+        return Array([func(v) for v in self.values])
