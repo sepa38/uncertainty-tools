@@ -19,6 +19,13 @@ class Array:
         else:
             return self.values[index]
 
+    def __setitem__(self, index, value):
+        if isinstance(value, (UncertainValue, int, float)):
+            value = value if isinstance(value, UncertainValue) else UncertainValue(value)
+            self.values[index] = value
+        else:
+            raise ValueError("Element must be an instance of UncertainValue, int or float")
+
     def __repr__(self):
         return f"Array({self.values})"
 
