@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.append(os.pardir)
 
-from uncertain_value import UncertainValue # type: ignore
+from src import UncertainValue
 
 
 class TestUncertainValueSubtraction(unittest.TestCase):
