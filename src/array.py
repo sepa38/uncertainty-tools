@@ -66,3 +66,6 @@ class Array:
 
     def map(self, func):
         return Array([func(v) for v in self.values])
+
+    def filter(self, predicate):
+        return Array([v for v in self.values if predicate(v)])
