@@ -18,6 +18,8 @@ class UncertainValue:
 
                 rounded_value = int(value_str[:digit] + "0"*(-digit))
                 round_up = 1 if int(value_str[digit]) >= 5 else 0
+                if value < 0:
+                    round_up *= -1
                 rounded_value += round_up * pow(10, -digit)
                 return rounded_value
             else:
@@ -30,6 +32,8 @@ class UncertainValue:
 
                 rounded_value = float(f"{integer_part}.{decimal_part[:digit]}")
                 round_up = 1 if int(decimal_part[digit]) >= 5 else 0
+                if value < 0:
+                    round_up *= -1
                 rounded_value += round_up * pow(10, -digit)
 
                 if digit == 0:
