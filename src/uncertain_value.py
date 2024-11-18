@@ -4,7 +4,7 @@ import math
 class UncertainValue:
     def __init__(self, value, error=0):
         self.value = value
-        self.error = error
+        self.error = abs(error)
         self.round_to_significant()
 
     def round_to_significant(self):
