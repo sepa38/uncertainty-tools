@@ -164,11 +164,15 @@ class UncertainValue:
     def __repr__(self):
         value_str, error_str = self.format_value_and_error()
         if self.error == 0:
+            if int(float(value_str)) == float(value_str):
+                value_str = value_str.split(".")[0]
             return value_str
         return f"{value_str} ± {error_str}"
 
     def to_latex(self):
         value_str, error_str = self.format_value_and_error()
         if self.error == 0:
+            if int(float(value_str)) == float(value_str):
+                value_str = value_str.split(".")[0]
             return f"${value_str}$"
         return f"${value_str} \pm {error_str}$"
