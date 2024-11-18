@@ -5,9 +5,8 @@ class UncertainValue:
     def __init__(self, value, error=0):
         self.value = value
         self.error = abs(error)
-        self.round_to_significant()
 
-    def round_to_significant(self):
+    def rounded(self):
         def exact_round(value, digit):
             if digit < 0:
                 value = int(value)
@@ -56,8 +55,7 @@ class UncertainValue:
             rounded_value = int(rounded_value)
             rounded_error = int(rounded_error)
 
-        self.value = rounded_value
-        self.error = rounded_error
+        return UncertainValue(rounded_value, rounded_error)
 
     def format_value_and_error(self):
         error_decimal_places = -int(f"{self.error:.1e}".split('e')[1])
@@ -170,7 +168,8 @@ class UncertainValue:
         return f"{value_str} ± {error_str}"
 
     def to_latex(self):
-        value_str, error_str = self.format_value_and_error()
+        rounded_instance = self.rounded()
+        value_str, error_str = rounded_instance.format_value_and_error()
         if self.error == 0:
             if int(float(value_str)) == float(value_str):
                 value_str = value_str.split(".")[0]
