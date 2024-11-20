@@ -168,8 +168,17 @@ class UncertainValue:
             return value_str
         return f"{value_str} ± {error_str}"
 
-    def to_latex(self):
+    def to_latex(self, scientific=False):
         rounded_instance = self.rounded()
+
+        if scientific:
+            exponent = int(f"{rounded_instance.value:.1e}".split("e")[1])
+            mantissa_instance = rounded_instance / pow(10, exponent)
+            if self.error == 0:
+                return f"${mantissa_instance.value} \\times 10^{{{exponent}}}$"
+            value_str, error_str = mantissa_instance.format_value_and_error()
+            return f"$({value_str} \pm {error_str}) \\times 10^{{{exponent}}}$"
+
         value_str, error_str = rounded_instance.format_value_and_error()
         if self.error == 0:
             if int(float(value_str)) == float(value_str):
