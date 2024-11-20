@@ -58,13 +58,14 @@ class UncertainValue:
         return UncertainValue(rounded_value, rounded_error)
 
     def format_value_and_error(self):
-        error_decimal_places = -int(f"{self.error:.1e}".split('e')[1])
+        rounded_instance = self.rounded()
+        error_decimal_places = -int(f"{rounded_instance.error:.1e}".split('e')[1])
         if error_decimal_places > 0:
-            value_str = f"{self.value:.{error_decimal_places}f}"
-            error_str = f"{self.error:.{error_decimal_places}f}"
+            value_str = f"{rounded_instance.value:.{error_decimal_places}f}"
+            error_str = f"{rounded_instance.error:.{error_decimal_places}f}"
         else:
-            value_str = str(self.value)
-            error_str = str(self.error)
+            value_str = str(rounded_instance.value)
+            error_str = str(rounded_instance.error)
         return value_str, error_str
 
     def sqrt(self):
