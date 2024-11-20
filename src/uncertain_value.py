@@ -40,7 +40,7 @@ class UncertainValue:
                 return rounded_value
 
         if self.error == 0:
-            return
+            return self
 
         error_str = f"{self.error:.1e}"
         error_parts = error_str.split('e')
