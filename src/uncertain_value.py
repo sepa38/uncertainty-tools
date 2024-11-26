@@ -2,9 +2,10 @@ import math
 
 
 class UncertainValue:
-    def __init__(self, value, error=0):
+    def __init__(self, value, error=0, decimal_places=None):
         self.value = value
         self.error = abs(error)
+        self.decimal_places = decimal_places
 
     def rounded(self):
         def exact_round(value, digit):
@@ -59,7 +60,10 @@ class UncertainValue:
 
     def format_value_and_error(self):
         rounded_instance = self.rounded()
-        error_decimal_places = -int(f"{rounded_instance.error:.1e}".split('e')[1])
+        if self.decimal_places is None:
+            error_decimal_places = -int(f"{rounded_instance.error:.1e}".split('e')[1])
+        else:
+            error_decimal_places = self.decimal_places
         if error_decimal_places > 0:
             value_str = f"{rounded_instance.value:.{error_decimal_places}f}"
             error_str = f"{rounded_instance.error:.{error_decimal_places}f}"
@@ -163,7 +167,8 @@ class UncertainValue:
     def __repr__(self):
         value_str, error_str = self.format_value_and_error()
         if self.error == 0:
-            if int(float(value_str)) == float(value_str):
+            if int(float(value_str)) == float(value_str) and \
+            (self.decimal_places is None or self.decimal_places < 0):
                 value_str = value_str.split(".")[0]
             return value_str
         return f"{value_str} ± {error_str}"
@@ -181,7 +186,8 @@ class UncertainValue:
 
         value_str, error_str = rounded_instance.format_value_and_error()
         if self.error == 0:
-            if int(float(value_str)) == float(value_str):
+            if int(float(value_str)) == float(value_str) and \
+            (self.decimal_places is None or self.decimal_places < 0):
                 value_str = value_str.split(".")[0]
             return f"${value_str}$"
         return f"${value_str} \pm {error_str}$"
