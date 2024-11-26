@@ -35,3 +35,14 @@ class ArrayTable:
         header = " | ".join(column_names)
         str_rows = "\n".join(" | ".join(map(str, row)) for row in rows)
         return f"{header}\n" + "-" * len(header) + f"\n{str_rows}"
+
+    def to_latex(self):
+        if not self.columns:
+            return "Empty ArrayTable"
+        column_names = list(self.columns.keys())
+        rows = zip(*[self.columns[col].values for col in column_names])
+        header = " & ".join(column_names)
+        str_rows = f" \\\\ \n".join(
+            " & ".join(cell.to_latex() for cell in row)
+            for row in rows)
+        return f"{header} \\\\ \hline\n" + f"{str_rows}"
