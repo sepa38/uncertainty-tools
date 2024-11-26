@@ -27,3 +27,11 @@ class ArrayTable:
     def __setitem__(self, name, values):
         self.add_column(name, values)
 
+    def __repr__(self):
+        if not self.columns:
+            return "Empty ArrayTable"
+        column_names = list(self.columns.keys())
+        rows = zip(*[self.columns[col].values for col in column_names])
+        header = " | ".join(column_names)
+        str_rows = "\n".join(" | ".join(map(str, row)) for row in rows)
+        return f"{header}\n" + "-" * len(header) + f"\n{str_rows}"
