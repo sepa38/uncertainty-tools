@@ -41,6 +41,9 @@ class Array:
 
         return Array([self[i] + other for i in range(len(self))])
 
+    def __radd__(self, other):
+        return self.__add__(other)
+
     def __sub__(self, other):
         if not isinstance(other, (Array, UncertainValue, int, float)):
             raise ValueError("Operand must be an instance of Array, int, float or UncertainValue.")
@@ -51,6 +54,11 @@ class Array:
             return Array([self[i] - other[i] for i in range(len(self))])
 
         return Array([self[i] - other for i in range(len(self))])
+
+    def __rsub__(self, other):
+        if not isinstance(other, (int, float, UncertainValue)):
+            raise ValueError("Operand must be an instance of Array, int, float or UncertainValue.")
+        return Array([other - self[i] for i in range(len(self))])
 
     def __mul__(self, other):
         if not isinstance(other, (Array, UncertainValue, int, float)):
@@ -63,6 +71,9 @@ class Array:
 
         return Array([self[i] * other for i in range(len(self))])
 
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
     def __truediv__(self, other):
         if not isinstance(other, (Array, UncertainValue, int, float)):
             raise ValueError("Operand must be an instance of Array, int, float or UncertainValue.")
@@ -73,6 +84,11 @@ class Array:
             return Array([self[i] / other[i] for i in range(len(self))])
 
         return Array([self[i] / other for i in range(len(self))])
+
+    def __rtruediv__(self, other):
+        if not isinstance(other, (int, float, UncertainValue)):
+            raise ValueError("Operand must be an instance of Array, int, float or UncertainValue.")
+        return Array([other / self[i] for i in range(len(self))])
 
     def append(self, value):
         if isinstance(value, (UncertainValue, int, float)):
