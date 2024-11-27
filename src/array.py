@@ -2,7 +2,7 @@ from .uncertain_value import UncertainValue
 
 
 class Array:
-    def __init__(self, values=[]):
+    def __init__(self, values=[], latex_label=None):
         if not isinstance(values, list):
             raise ValueError("Values must be a list.")
 
@@ -10,13 +10,14 @@ class Array:
             raise ValueError("All elements must be instances of UncertainValue, int or float.")
 
         self.values = [v if isinstance(v, UncertainValue) else UncertainValue(v) for v in values]
+        self.latex_label = latex_label
 
     def __len__(self):
         return len(self.values)
 
     def __getitem__(self, index):
         if isinstance(index, slice):
-            return Array(self.values[index.start:index.stop:index.step])
+            return Array(self.values[index.start:index.stop:index.step], self.latex_label)
         else:
             return self.values[index]
 
@@ -37,9 +38,9 @@ class Array:
         if isinstance(other, Array):
             if len(self) != len(other):
                 raise ValueError("Arrays must have the same length.")
-            return Array([self[i] + other[i] for i in range(len(self))])
+            return Array([self[i] + other[i] for i in range(len(self))], self.latex_label)
 
-        return Array([self[i] + other for i in range(len(self))])
+        return Array([self[i] + other for i in range(len(self))], self.latex_label)
 
     def __radd__(self, other):
         return self.__add__(other)
@@ -51,14 +52,14 @@ class Array:
         if isinstance(other, Array):
             if len(self) != len(other):
                 raise ValueError("Arrays must have the same length.")
-            return Array([self[i] - other[i] for i in range(len(self))])
+            return Array([self[i] - other[i] for i in range(len(self))], self.latex_label)
 
-        return Array([self[i] - other for i in range(len(self))])
+        return Array([self[i] - other for i in range(len(self))], self.latex_label)
 
     def __rsub__(self, other):
         if not isinstance(other, (int, float, UncertainValue)):
             raise ValueError("Operand must be an instance of Array, int, float or UncertainValue.")
-        return Array([other - self[i] for i in range(len(self))])
+        return Array([other - self[i] for i in range(len(self))], self.latex_label)
 
     def __mul__(self, other):
         if not isinstance(other, (Array, UncertainValue, int, float)):
@@ -67,9 +68,9 @@ class Array:
         if isinstance(other, Array):
             if len(self) != len(other):
                 raise ValueError("Arrays must have the same length.")
-            return Array([self[i] * other[i] for i in range(len(self))])
+            return Array([self[i] * other[i] for i in range(len(self))], self.latex_label)
 
-        return Array([self[i] * other for i in range(len(self))])
+        return Array([self[i] * other for i in range(len(self))], self.latex_label)
 
     def __rmul__(self, other):
         return self.__mul__(other)
@@ -81,14 +82,14 @@ class Array:
         if isinstance(other, Array):
             if len(self) != len(other):
                 raise ValueError("Arrays must have the same length.")
-            return Array([self[i] / other[i] for i in range(len(self))])
+            return Array([self[i] / other[i] for i in range(len(self))], self.latex_label)
 
-        return Array([self[i] / other for i in range(len(self))])
+        return Array([self[i] / other for i in range(len(self))], self.latex_label)
 
     def __rtruediv__(self, other):
         if not isinstance(other, (int, float, UncertainValue)):
             raise ValueError("Operand must be an instance of Array, int, float or UncertainValue.")
-        return Array([other / self[i] for i in range(len(self))])
+        return Array([other / self[i] for i in range(len(self))], self.latex_label)
 
     def append(self, value):
         if isinstance(value, (UncertainValue, int, float)):
@@ -97,8 +98,11 @@ class Array:
         else:
             raise ValueError("Appended value must be an instance of UncertainValue, int or float.")
 
+    def set_latex_label(self, latex_label):
+        self.latex_label = latex_label
+
     def map(self, func):
-        return Array([func(v) for v in self.values])
+        return Array([func(v) for v in self.values], self.latex_label)
 
     def filter(self, predicate):
-        return Array([v for v in self.values if predicate(v)])
+        return Array([v for v in self.values if predicate(v)], self.latex_label)
