@@ -2,10 +2,11 @@ import math
 
 
 class UncertainValue:
-    def __init__(self, value, error=0, decimal_places=None):
+    def __init__(self, value, error=0, decimal_places=None, scientific=False):
         self.value = value
         self.error = abs(error)
         self.decimal_places = decimal_places
+        self.scientific = self.scientific
 
     def rounded(self):
         def exact_round(value, digit):
@@ -173,7 +174,10 @@ class UncertainValue:
             return value_str
         return f"{value_str} ± {error_str}"
 
-    def to_latex(self, scientific=False):
+    def to_latex(self, scientific=None):
+        if scientific is None:
+            scientific = self.scientific
+
         rounded_instance = self.rounded()
 
         if scientific:
