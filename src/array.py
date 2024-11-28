@@ -12,6 +12,9 @@ class Array:
         self.values = [v if isinstance(v, UncertainValue) else UncertainValue(v) for v in values]
         self.latex_label = latex_label
 
+    def rounded(self):
+        return Array([self[i].rounded() for i in range(len(self))])
+
     def __len__(self):
         return len(self.values)
 
