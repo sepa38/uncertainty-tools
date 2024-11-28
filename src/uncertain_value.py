@@ -166,13 +166,7 @@ class UncertainValue:
         return UncertainValue(abs(self.value), self.error)
 
     def __repr__(self):
-        value_str, error_str = self.format_value_and_error()
-        if self.error == 0:
-            if int(float(value_str)) == float(value_str) and \
-            (self.decimal_places is None or self.decimal_places < 0):
-                value_str = value_str.split(".")[0]
-            return value_str
-        return f"{value_str} ± {error_str}"
+        return f"{self.value} ± {self.error}"
 
     def to_latex(self, scientific=None):
         if scientific is None:
