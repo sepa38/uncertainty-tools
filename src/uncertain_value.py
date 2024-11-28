@@ -6,7 +6,7 @@ class UncertainValue:
         self.value = value
         self.error = abs(error)
         self.decimal_places = decimal_places
-        self.scientific = self.scientific
+        self.scientific = scientific
 
     def rounded(self):
         def exact_round(value, digit):
