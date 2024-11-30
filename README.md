@@ -52,6 +52,7 @@ print((x * y).to_latex(scientific=True)) # $(2.5 \pm 0.1) \times 10^{4}$
 ```
 The propagation of errors for operations such as addition, subtraction, multiplication, and division is calculated using the formula described in **Features**. For example:
 - When multiplying $x = 250 \pm 5$ and $y = 100 \pm 4$, the result is $25000 \pm 1118.03$, where the uncertainty is calculated as:
+
 $$\Delta z = \sqrt{
   \left(\frac{\partial f}{\partial x} \Delta x \right)^2 + 
   \left(\frac{\partial f}{\partial y} \Delta y \right)^2
@@ -68,7 +69,7 @@ print(x + 2) # Array([14.8 ± 0.8, 13.4 ± 0.6, 14.1 ± 0.7])
 print((x / y).rounded()) # Array([0.64 ± 0.04, 0.63 ± 0.03, 0.64 ± 0.04])
 ```
 
-## 3. `ArrayTable`
+### 3. `ArrayTable`
 ```python
 # Create data columns
 V = Array([UncertainValue(12.8, 0.8), UncertainValue(11.4, 0.6), UncertainValue(12.1, 0.7)])
