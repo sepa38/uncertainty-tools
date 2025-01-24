@@ -50,4 +50,4 @@ class ArrayTable:
         str_rows = f" \\\\ \n".join(
             " & ".join(cell.to_latex() for cell in row)
             for row in rows)
-        return f"{header} \\\\ \hline\n" + f"{str_rows}"
+        return f"{header} \\\\ \hline\n" + f"{str_rows}" + " \\\\"
