@@ -20,12 +20,14 @@ def least_squares(x, y):
     a_value = (sum_xy - sum_x * sum_y / n) / variance_x
     b_value = (sum_y - a_value * sum_x) / n
 
-    residuals = [(y_values[i] - (a_value * x_values[i] + b_value)) ** 2 for i in range(n)]
+    residuals = [
+        (y_values[i] - (a_value * x_values[i] + b_value)) ** 2 for i in range(n)
+    ]
     residual_sum = sum(residuals)
     variance = residual_sum / (n - 2)
 
     a_error = (variance / variance_x) ** 0.5
-    b_error = (variance * (1 / n + (sum_x / n)**2 / variance_x)) ** 0.5
+    b_error = (variance * (1 / n + (sum_x / n) ** 2 / variance_x)) ** 0.5
 
     a = UncertainValue(a_value, a_error)
     b = UncertainValue(b_value, b_error)
@@ -52,7 +54,7 @@ def weighted_least_squres(x, y, weights=None):
     sum_w = sum(weights)
     sum_wx = sum(weights[i] * x_values[i] for i in range(len(n)))
     sum_wy = sum(weights[i] * y_values[i] for i in range(len(n)))
-    sum_wxx = sum(weights[i] * x_values[i]**2 for i in range(len(n)))
+    sum_wxx = sum(weights[i] * x_values[i] ** 2 for i in range(len(n)))
     sum_wxy = sum(weights[i] * x_values[i] * y_values[i] for i in range(len(n)))
 
     a_value = (sum_w * sum_wxy - sum_wx * sum_wy) / (sum_w * sum_wxx - sum_wx**2)

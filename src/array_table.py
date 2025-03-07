@@ -48,6 +48,6 @@ class ArrayTable:
         rows = zip(*[col.values for col in self.columns.values()])
         header = " & ".join(column_labels)
         str_rows = f" \\\\ \n".join(
-            " & ".join(cell.to_latex() for cell in row)
-            for row in rows)
+            " & ".join(cell.to_latex() for cell in row) for row in rows
+        )
         return f"{header} \\\\ \hline\n" + f"{str_rows}" + " \\\\"

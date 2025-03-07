@@ -17,7 +17,7 @@ class UncertainValue:
                 if -digit > len(value_str):
                     return 0
 
-                rounded_value = int(value_str[:digit] + "0"*(-digit))
+                rounded_value = int(value_str[:digit] + "0" * (-digit))
                 round_up = 1 if int(value_str[digit]) >= 5 else 0
                 if value < 0:
                     round_up *= -1
@@ -45,12 +45,12 @@ class UncertainValue:
             return self
 
         error_str = f"{self.error:.1e}"
-        error_parts = error_str.split('e')
+        error_parts = error_str.split("e")
         significant_digit = float(error_parts[0])
         exponent = int(error_parts[1])
 
         rounded_error = exact_round(significant_digit * 10**exponent, -exponent)
-        rounding_digit = -int(f"{rounded_error:.1e}".split('e')[1])
+        rounding_digit = -int(f"{rounded_error:.1e}".split("e")[1])
         rounded_value = exact_round(self.value, rounding_digit)
 
         if rounded_error >= 1:
@@ -62,7 +62,7 @@ class UncertainValue:
     def format_value_and_error(self):
         rounded_instance = self.rounded()
         if self.decimal_places is None:
-            error_decimal_places = -int(f"{rounded_instance.error:.1e}".split('e')[1])
+            error_decimal_places = -int(f"{rounded_instance.error:.1e}".split("e")[1])
         else:
             error_decimal_places = self.decimal_places
         if error_decimal_places > 0:
@@ -77,8 +77,8 @@ class UncertainValue:
         if self.value < 0:
             raise ValueError("Cannot take the square root of a negative value.")
 
-        new_value = self.value ** 0.5
-        new_error = (self.error / (2 * new_value))
+        new_value = self.value**0.5
+        new_error = self.error / (2 * new_value)
         return UncertainValue(new_value, new_error)
 
     def log(self, base=math.e):
@@ -125,7 +125,9 @@ class UncertainValue:
             new_value = self.value * other.value
             partial_x1 = other.value
             partial_x2 = self.value
-            new_error = ((partial_x1 * self.error)**2 + (partial_x2 * other.error)**2) ** 0.5
+            new_error = (
+                (partial_x1 * self.error) ** 2 + (partial_x2 * other.error) ** 2
+            ) ** 0.5
             return UncertainValue(new_value, new_error)
         return NotImplemented
 
@@ -142,7 +144,9 @@ class UncertainValue:
             new_value = self.value / other.value
             partial_x1 = 1 / other.value
             partial_x2 = -self.value / (other.value**2)
-            new_error = ((partial_x1 * self.error)**2 + (partial_x2 * other.error)**2) ** 0.5
+            new_error = (
+                (partial_x1 * self.error) ** 2 + (partial_x2 * other.error) ** 2
+            ) ** 0.5
             return UncertainValue(new_value, new_error)
         return NotImplemented
 
@@ -184,8 +188,9 @@ class UncertainValue:
 
         value_str, error_str = rounded_instance.format_value_and_error()
         if self.error == 0:
-            if int(float(value_str)) == float(value_str) and \
-            (self.decimal_places is None or self.decimal_places < 0):
+            if int(float(value_str)) == float(value_str) and (
+                self.decimal_places is None or self.decimal_places < 0
+            ):
                 value_str = value_str.split(".")[0]
             return f"${value_str}$"
         return f"${value_str} \pm {error_str}$"

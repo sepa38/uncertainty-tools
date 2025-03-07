@@ -1,13 +1,13 @@
 import unittest
 import sys
 import os
+
 sys.path.append(os.pardir)
 
 from src import UncertainValue
 
 
 class TestUncertainValueAddition(unittest.TestCase):
-
     def test_addition_both_uncertain(self):
         x1 = UncertainValue(10, 0.5)
         x2 = UncertainValue(20, 0.3)
@@ -52,5 +52,6 @@ class TestUncertainValueAddition(unittest.TestCase):
         result = x1 + x2
         self.assertEqual(repr(result), "30 ± 5")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

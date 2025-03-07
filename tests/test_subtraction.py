@@ -1,13 +1,13 @@
 import unittest
 import sys
 import os
+
 sys.path.append(os.pardir)
 
 from src import UncertainValue
 
 
 class TestUncertainValueSubtraction(unittest.TestCase):
-
     def test_substraction_both_uncertain(self):
         x1 = UncertainValue(15.0, 0.5)
         x2 = UncertainValue(10.0, 0.3)
@@ -52,5 +52,6 @@ class TestUncertainValueSubtraction(unittest.TestCase):
         result = x1 - x2
         self.assertEqual(repr(result), "10 ± 5")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

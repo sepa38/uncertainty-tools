@@ -1,13 +1,13 @@
 import unittest
 import sys
 import os
+
 sys.path.append(os.pardir)
 
 from src import UncertainValue
 
 
 class TestUncertainValueDivision(unittest.TestCase):
-
     def test_division_both_uncertain(self):
         x1 = UncertainValue(20, 0.5)
         x2 = UncertainValue(10, 0.3)
@@ -71,5 +71,6 @@ class TestUncertainValueDivision(unittest.TestCase):
         result = x2 / x1
         self.assertEqual(repr(result), "2.0 ± 0.5")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

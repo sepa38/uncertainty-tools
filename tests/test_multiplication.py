@@ -1,13 +1,13 @@
 import unittest
 import sys
 import os
+
 sys.path.append(os.pardir)
 
 from src import UncertainValue
 
 
 class TestUncertainValueMultiplication(unittest.TestCase):
-
     def test_multiplication_both_uncertain(self):
         x1 = UncertainValue(10, 0.6)
         x2 = UncertainValue(20, 1)
@@ -62,5 +62,6 @@ class TestUncertainValueMultiplication(unittest.TestCase):
         result = x1 * x2
         self.assertEqual(repr(result), "200 ± 50")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

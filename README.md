@@ -54,7 +54,7 @@ The propagation of errors for operations such as addition, subtraction, multipli
 - When multiplying $x = 250 \pm 5$ and $y = 100 \pm 4$, the result is $25000 \pm 1118.03$, where the uncertainty is calculated as:
 
 $$\Delta z = \sqrt{
-  \left(\frac{\partial f}{\partial x} \Delta x \right)^2 + 
+  \left(\frac{\partial f}{\partial x} \Delta x \right)^2 +
   \left(\frac{\partial f}{\partial y} \Delta y \right)^2
 }$$
 
@@ -95,7 +95,7 @@ table["R"].set_latex_label("$R / \\Omega$")
 # Generate LaTeX output
 print(table.to_latex())
 # $V / \text{V}$ & $I / \text{mA}$ & $R / \Omega$ \\ \hline
-# $12.8 \pm 0.8$ & $0.02$ & $640 \pm 40$ \\ 
-# $11.4 \pm 0.6$ & $0.018$ & $630 \pm 30$ \\ 
+# $12.8 \pm 0.8$ & $0.02$ & $640 \pm 40$ \\
+# $11.4 \pm 0.6$ & $0.018$ & $630 \pm 30$ \\
 # $12.1 \pm 0.7$ & $0.019$ & $640 \pm 40$ \\
 ```
