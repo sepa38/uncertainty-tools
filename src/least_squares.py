@@ -1,3 +1,5 @@
+import math
+
 from .uncertain_value import UncertainValue
 from .array import Array
 
@@ -12,21 +14,32 @@ def least_squares(x, y, model="linear"):
     x_values = [x_uv.value for x_uv in x]
     y_values = [y_uv.value for y_uv in y]
 
-    if model == "linear":
-        x_trans = x_values
-        y_trans = y_values
+    if model == "linear":  # y = a*x + b
+        pass
+    elif model == "power":  # y = a * x^b
+        try:
+            log_x = Array([math.log(val) for val in x_values])
+            log_y = Array([math.log(val) for val in y_values])
+        except ValueError:
+            raise ValueError("Power model requires all x and y to be positive.")
 
-    sum_x = sum(x_trans)
-    sum_y = sum(y_trans)
-    sum_xx = sum(val**2 for val in x_trans)
-    sum_xy = sum(x_trans[i] * y_trans[i] for i in range(n))
+        b, log_a = least_squares(log_x, log_y, model="linear")
+
+        return UncertainValue(math.exp(log_a.value), math.exp(log_a.value) * log_a.error), b
+    else:
+        raise ValueError(f"Unsupported model '{model}'.")
+
+    sum_x = sum(x_values)
+    sum_y = sum(y_values)
+    sum_xx = sum(val**2 for val in x_values)
+    sum_xy = sum(x_values[i] * y_values[i] for i in range(n))
 
     variance_x = (n * sum_xx - sum_x**2) / n
     a_value = (sum_xy - sum_x * sum_y / n) / variance_x
     b_value = (sum_y - a_value * sum_x) / n
 
     residuals = [
-        (y_trans[i] - (a_value * x_trans[i] + b_value)) ** 2 for i in range(n)
+        (y_values[i] - (a_value * x_values[i] + b_value)) ** 2 for i in range(n)
     ]
     residual_sum = sum(residuals)
     variance = residual_sum / (n - 2)
