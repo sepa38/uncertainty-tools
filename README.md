@@ -99,3 +99,6 @@ print(table.to_latex())
 # $11.4 \pm 0.6$ & $0.018$ & $630 \pm 30$ \\
 # $12.1 \pm 0.7$ & $0.019$ & $640 \pm 40$ \\
 ```
+
+## Contributing
+Feel free to fork the repository and submit pull requests! Issues and suggestions are also welcome.
